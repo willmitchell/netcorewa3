@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/windows/servercore:ltsc2022 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5000
+#EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
@@ -12,9 +12,11 @@ WORKDIR "/src/"
 RUN dotnet build "netcorewa3.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "netcorewa3.csproj" -c Release -o /app/publish
+RUN dotnet publish -r win-x64 "netcorewa3.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "netcorewa3.dll"]
+COPY --from=publish /app/publish /app
+ENTRYPOINT ["netcorewa3.exe"]
+#CMD ["powershell"]
+#CMD ["powershell"]
