@@ -44,14 +44,14 @@ jobs:
         run: |
           docker build `
             --file Dockerfile `
-            --tag "${env:IMAGE_NAME}:latest" `
-            --tag "${env:IMAGE_NAME}:${{ github.sha }}" `
+            --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" `
+            --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" `
             .
 
       - name: Push the Docker image
         run: |
-          docker push "${env:IMAGE_NAME}:latest"
-          docker push "${env:IMAGE_NAME}:${{ github.sha }}"
+          docker push "$${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
       
 #      - name: Push image to ghcr.io
 #        uses: docker/build-push-action@v2
