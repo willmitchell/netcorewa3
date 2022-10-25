@@ -30,7 +30,6 @@ jobs:
             --build-arg BUILD_DATE=$(Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ") `
             --build-arg VCS_REF=${{ github.sha }} `
             --build-arg VERSION=${{ env.VERSION }} .
-            .
         
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -61,7 +60,6 @@ jobs:
             --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ") \
             --build-arg VCS_REF=${{ github.sha }} \
             --build-arg VERSION=${{ env.VERSION }} .
-            .        
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
