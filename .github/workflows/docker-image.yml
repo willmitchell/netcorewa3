@@ -25,8 +25,8 @@ jobs:
         run: |
           docker build `
             --file Dockerfile `
-            --tag $env:IMAGE_NAME:latest `
-            --tag $env:IMAGE_NAME:${{ github.sha }} `
+            --tag "${env:IMAGE_NAME}:latest" `
+            --tag "${env:IMAGE_NAME}:${{ github.sha }}" `
             --build-arg BUILD_DATE=$(Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ") `
             --build-arg VCS_REF=${{ github.sha }} `
             --build-arg VERSION=${{ env.VERSION }} .
