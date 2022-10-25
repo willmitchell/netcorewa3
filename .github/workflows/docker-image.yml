@@ -15,7 +15,7 @@ jobs:
   build-windows:
     
     env:
-      FULL_IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-windows
+      FULL_IMAGE_NAME: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-windows"
 
     runs-on: windows-latest
 
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:  
-      FULL_IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-linux
+      FULL_IMAGE_NAME: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-linux"
 
     steps:
       - name: Checkout repository
