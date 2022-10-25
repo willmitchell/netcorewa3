@@ -49,7 +49,7 @@ jobs:
 
       - name: Push the Docker image
         run: |
-          docker push "$${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest"
+          docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest"
           docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ github.sha }}"
       
 
