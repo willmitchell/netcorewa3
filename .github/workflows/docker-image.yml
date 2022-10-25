@@ -13,11 +13,11 @@ env:
 jobs:
   
   build-windows:
-    
-    env:
-      FULL_IMAGE_NAME: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-windows"
 
     runs-on: windows-latest
+    
+    env:
+      SUFFIX: "-windows"
 
     steps:
       - name: Checkout repository
@@ -37,29 +37,29 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ FULL_IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}
           
       - name: Build the Docker image
         run: |
           docker build `
             --file Dockerfile `
-            --tag "${{ FULL_IMAGE_NAME }}:latest" `
-            --tag "${{ FULL_IMAGE_NAME }}:${{ github.sha }}" `
+            --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest" `
+            --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ github.sha }}" `
             .
 
       - name: Push the Docker image
         run: |
-          docker push "${{ FULL_IMAGE_NAME }}:latest"
-          docker push "${{ FULL_IMAGE_NAME }}:${{ github.sha }}"
+          docker push "$${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest"
+          docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ github.sha }}"
       
 
   build-linux:
 
     runs-on: ubuntu-latest
 
-    env:  
-      FULL_IMAGE_NAME: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-linux"
-
+    env:
+      SUFFIX: "-linux"
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -81,7 +81,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ FULL_IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}
         
       - name: Build and push image to ghcr.io
         uses: docker/build-push-action@v2
@@ -89,5 +89,5 @@ jobs:
           context: .
           file: ./Dockerfile.linux
           push: true
-          tags: ${{ FULL_IMAGE_NAME }}:latest, ${{ FULL_IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ github.sha }}
       
