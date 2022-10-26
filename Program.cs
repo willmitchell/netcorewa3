@@ -15,15 +15,30 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // app.UseExceptionHandler("/Home/Error");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// app.MapGet("/Environment", () =>
+// {
+//     return new EnvironmentInfo();
+// });
+
+// app.UseAuthorization();
 
 app.MapControllers();
+
+// enable debug logging
+app.Use(async (context, next) =>
+{
+    Console.WriteLine(context.Request.Path);
+    await next();
+});
+
+// set global logging level to debug
 
 Console.WriteLine("Configuration:");
 foreach (var item in app.Configuration.AsEnumerable())
@@ -32,12 +47,25 @@ foreach (var item in app.Configuration.AsEnumerable())
 }
 
 // print out container ip address
-var host = app.Services.GetRequiredService<IHostApplicationLifetime>();
-host.ApplicationStarted.Register(() =>
+// var host = app.Services.GetRequiredService<IHostApplicationLifetime>();
+// host.ApplicationStarted.Register(() =>
+// {
+//     var ip = Dns.GetHostAddresses(Dns.GetHostName())
+//         .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+//     Console.WriteLine($"Container IP: {ip}");
+// });
+
+// add a redirect from / to /swagger/index.html
+app.Use(async (context, next) =>
 {
-    var ip = Dns.GetHostAddresses(Dns.GetHostName())
-        .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
-    Console.WriteLine($"Container IP: {ip}");
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger/index.html");
+    }
+    else
+    {
+        await next();
+    }
 });
 
 app.Run();

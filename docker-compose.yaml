@@ -1,27 +1,25 @@
 # run netcorewa3-linux on the bridge network
 services:
   netcorewa3-linux:
-    image: netcorewa3-linux:latest
+    image: netcorewa3-linux
     build:
       context: .
       dockerfile: ./linux/Dockerfile
     container_name: netcorewa3-linux
     restart: always
-    network_mode: bridge
+    network_mode: host
     ports:
-      - 8080:8080
+      - 5000:80
     volumes:
-      - /var/log/netcorewa3-linux:/var/log/netcorewa3-linux
       - /etc/localtime:/etc/localtime:ro
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:8080
-  # run nginx on port 3000
+      - ASPNETCORE_URLS=http://localhost
 #  nginx:
 #    image: nginx:latest
 #    container_name: nginx
 #    restart: always
-#    network_mode: bridge
+#    network_mode: host
 #    ports:
 #    - 3000:80
 #    volumes:

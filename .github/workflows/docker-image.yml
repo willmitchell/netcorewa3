@@ -99,4 +99,4 @@ jobs:
           tags: |
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest
               ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ github.sha }}
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ steps.meta.outputs.tags }}
+            

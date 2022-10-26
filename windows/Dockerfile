@@ -8,7 +8,7 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["netcorewa3.csproj", "./"]
 RUN dotnet restore "netcorewa3.csproj"
-COPY .. .
+COPY . .
 WORKDIR "/src/"
 RUN dotnet build "netcorewa3.csproj" -c Release -o /app/build
 
