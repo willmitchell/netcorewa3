@@ -41,7 +41,8 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          cp .\windows\Dockerfile .\Dockerfile 
+          # verbose copy
+          copy ./windows/Dockerfile . 
           docker build `
             --file Dockerfile `
             --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest" `
