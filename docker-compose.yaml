@@ -7,7 +7,7 @@ services:
       dockerfile: ./linux/Dockerfile
     container_name: netcorewa3-linux
     restart: always
-    network_mode: host
+    network_mode: bridge
     ports:
       - 8080:8080
     volumes:

@@ -41,8 +41,9 @@ jobs:
 
       - name: Build the Docker image
         run: |
+          cp .\windows\Dockerfile .\Dockerfile 
           docker build `
-            --file ./windows/Dockerfile `
+            --file Dockerfile `
             --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest" `
             --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ github.sha }}" `
             .
