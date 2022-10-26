@@ -84,10 +84,22 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}
 
+      # build for both amd64 and arm64
+#      - name: Build the Docker image
+#        run: |
+#          cp ./linux/Dockerfile ./Dockerfile 
+#          docker buildx build `
+#              --file Dockerfile `
+#              --platform linux/amd64,linux/arm64 `
+#              --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest" `
+#              --tag "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ github.sha }}" `
+#              --push .
+
       - name: Build and push image to ghcr.io
         uses: docker/build-push-action@v2
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           file: ./linux/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:latest, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.SUFFIX }}:${{ github.sha }}
