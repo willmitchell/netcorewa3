@@ -1,6 +1,5 @@
 using System.Net;
 using System.Net.Sockets;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,27 +9,38 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddHealthChecks()
-    .AddCheck("HealthChecker", () => HealthCheckResult.Healthy("A healthy result."));
+// builder.Services.AddHealthChecks()
+//     .AddCheck("HealthChecker", () => HealthCheckResult.Healthy("A healthy result."));
+
+// enable blazor pages
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
-
-app.MapHealthChecks("/health");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    // app.UseExceptionHandler("/Home/Error");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// app.UseHttpsRedirection();
 
-// app.MapGet("/Environment", () =>
-// {
-//     return new EnvironmentInfo();
-// });
+// add a handler at / that returns HTML
+app.MapGet("/", async (HttpContext context) =>
+{
+    await context.Response.WriteAsync(@"
+    <html>
+    <head>
+        <title>ASP.NET Core Demo App</title>
+    </head>
+    <body>
+        <a href=""/swagger"">Swagger</a>
+    </body>
+    </html>
+    ");
+});
+
+// app.UseHttpsRedirection();
 
 // app.UseAuthorization();
 
@@ -43,34 +53,33 @@ app.Use(async (context, next) =>
     await next();
 });
 
-// set global logging level to debug
-
 Console.WriteLine("Configuration:");
 foreach (var item in app.Configuration.AsEnumerable())
 {
     Console.WriteLine($"{item.Key} = {item.Value}");
 }
 
-// print out container ip address
-// var host = app.Services.GetRequiredService<IHostApplicationLifetime>();
-// host.ApplicationStarted.Register(() =>
-// {
-//     var ip = Dns.GetHostAddresses(Dns.GetHostName())
-//         .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
-//     Console.WriteLine($"Container IP: {ip}");
-// });
-
-// add a redirect from / to /swagger/index.html
-app.Use(async (context, next) =>
+var host = app.Services.GetRequiredService<IHostApplicationLifetime>();
+host.ApplicationStarted.Register(() =>
 {
-    if (context.Request.Path == "/")
-    {
-        context.Response.Redirect("/swagger/index.html");
-    }
-    else
-    {
-        await next();
-    }
+    var ip = Dns.GetHostAddresses(Dns.GetHostName())
+        .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
+    Console.WriteLine($"Container IP: {ip}");
 });
+
+// do not do the below, as it breaks the default health check.  
+// easier to have / return a 200 and some content
+// add a redirect from / to /swagger/index.html
+// app.Use(async (context, next) =>
+// {
+//     if (context.Request.Path == "/")
+//     {
+//         context.Response.Redirect("/swagger/index.html");
+//     }
+//     else
+//     {
+//         await next();
+//     }
+// });
 
 app.Run();
