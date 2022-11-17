@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/windows/servercore:ltsc2022 AS base
+﻿FROM mcr.microsoft.com/windows/servercore:ltsc2019 AS base
 WORKDIR /app
 EXPOSE 5000
 EXPOSE 80
