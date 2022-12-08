@@ -40,6 +40,17 @@ app.MapGet("/", async (HttpContext context) =>
     ");
 });
 
+// add a handler at /health that returns JSON
+app.MapGet("/health", async (HttpContext context) =>
+{
+    // 200
+    context.Response.StatusCode = 200;
+    await context.Response.WriteAsync(@"
+    {
+        ""status"": ""Healthy""
+    }
+    ");
+});
 // app.UseHttpsRedirection();
 
 // app.UseAuthorization();
