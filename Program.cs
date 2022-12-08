@@ -62,6 +62,11 @@ app.Use(async (context, next) =>
     {
         context.Response.Redirect("/swagger/index.html");
     }
+    if (context.Request.Path == "/health")
+    {
+        context.Response.StatusCode = 200;
+        await context.Response.WriteAsync("OK");
+    }
     else
     {
         await next();
