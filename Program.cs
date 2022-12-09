@@ -28,6 +28,7 @@ if (app.Environment.IsDevelopment())
 // add a handler at / that returns HTML
 app.MapGet("/", async (HttpContext context) =>
 {
+    context.Response.StatusCode = 200;
     await context.Response.WriteAsync(@"
     <html>
     <head>
@@ -92,5 +93,13 @@ host.ApplicationStarted.Register(() =>
 //         await next();
 //     }
 // });
+
+// print out app URLS that are listening
+var urls = app.Urls;
+Console.WriteLine("Listening on:");
+foreach (var url in urls)
+{
+    Console.WriteLine(url);
+}
 
 app.Run();
