@@ -31,6 +31,10 @@ public class GetCurrentDomainController : Controller
             .ExecuteAsync();
 
         var stdOut = stdOutBuffer.ToString();
-        return stdOut.Split(Environment.NewLine);
+        var stdErr = stdErrBuffer.ToString();
+        
+        // return stdOut.Split(Environment.NewLine);
+        // combine stdOut and stdErr and return with a marker between them
+        return new string[] { stdOut, stdErr };
     }
 }
