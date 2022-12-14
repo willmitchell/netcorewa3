@@ -5,8 +5,24 @@ services:
     build:
       context: .
       dockerfile: ./linux/Dockerfile
-      
+    
     container_name: ncwl
+    restart: always
+    network_mode: bridge
+    ports:
+      - 5000:80
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+  netcorewa3-windows:
+    image: ncww
+    build:
+      context: .
+      dockerfile: ./linux/Dockerfile
+    
+    container_name: ncww
     restart: always
     network_mode: bridge
     ports:
